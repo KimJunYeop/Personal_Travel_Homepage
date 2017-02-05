@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //main routing에서도 path를 public에서 사용하도록 한다.
 app.use('/main',express.static(path.join(__dirname,'public')));
 app.use('/content',express.static(path.join(__dirname,'public')));
-app.use('/content',express.static(path.join(__dirname,'public')));
+app.use('/cash',express.static(path.join(__dirname,'public')));
 
 app.use('/first', first);
 app.use('/main',main);

@@ -11,28 +11,28 @@
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <link href="/stylesheets/cash.css" rel="stylesheet">
 
-    <!-- 슬릭그리드 기본 CSS -->
-		<link rel="stylesheet" href="/SlickGrid-master/libs/slickgrid/css/slick.grid.css" type="text/css"/>
-
-		<!-- jquery-ui가 없으면 안예쁘게 나옴 -->
-		<link rel="stylesheet" href="/SlickGrid-master/libs/jquery/css/jquery-ui.css" type="text/css"/>
-
-		<!-- 필수 jquery library -->
-		<script src="/SlickGrid-master/libs/jquery/js/jquery-1.7.2.min.js"></script>
-		<script src="/SlickGrid-master/libs/jquery/js/jquery.event.drag-2.0.min.js"></script>
-
-		<!-- 필수 슬릭그리드 library -->
-		<script src="/SlickGrid-master/libs/slickgrid/js/slick.core.js"></script>
-		<script src="/SlickGrid-master/libs/slickgrid/js/slick.grid.js"></script>
-
+    <link rel="stylesheet" href="/SlickGrid-master/slick.grid.css" type="text/css"/>
+    <link rel="stylesheet" href="/SlickGrid-master/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
 
   </head>
 
   <body>
+
     <div style="float : right;">
-      <button class="w3-btn" type="button" name="button">+</button>
+      <button class="w3-btn" type="button" name="button" onclick="AddRow()">+</button>
       <button class="w3-btn" type="button" name="button">-</button>
     </div>
+    <table width="100%">
+      <tr height="100%">
+        <td>
+          <div id="myGrid" style="width:600px;height:500px;"></div>
+        </td>
+      </tr>
+    </table>
+
+
+
+    <!--
     <br><br>
 
     <div class="w3-row" style="padding : 10px;">
@@ -41,9 +41,44 @@
       <div class="w3-col s3 w3-orange w3-center"><p>가격</p></div>
       <div class="w3-col s3 w3-dark-grey w3-center"><p>종류</p></div>
     </div>
-    <div id="grid_here" style="width:550px; height:150px;"></div>
+    <div id="grid_here" style="width:550px; height:150px;"></div> -->
+
+    <script src="/SlickGrid-master/lib/jquery-1.7.min.js"></script>
+    <script src="/SlickGrid-master/lib/jquery.event.drag-2.2.js"></script>
+
+    <script src="/SlickGrid-master/slick.dataview.js"></script>
+
+    <script src="/SlickGrid-master/slick.core.js"></script>
+    <script src="/SlickGrid-master/slick.grid.js"></script>
 
     <script type="text/javascript">
+      var data_view = new Slick.Data.DataView();
+
+      var columns = [
+        {id : "cash_id", name : "순번", field : "cash_id"},
+        {id : "cash_name", name : "이름", field : "cash_name"},
+        {id : "cash_value", name : "값", field : "cash_value"},
+        {id : "cash_kind", name : "종류", field : "cash_kind"}
+      ];
+
+
+      var data = [];
+      var options = {
+        enableCellNavgation : true,
+        enableColumnReorder : false
+      };
+      var gird = new Slick.Grid("#myGrid", data_view, columns, options);
+
+      function AddRow(){
+        data = {
+          "cash_id" : 1,
+          "cash_name" : 2,
+          "cash_value" : 3,
+          "cash_kind" : 4
+        };
+        data_view.insertItem(0,data);
+      };
+
 
     </script>
 
