@@ -18,17 +18,20 @@
 
   <body>
 
+
     <div style="float : right;">
       <button class="w3-btn" type="button" name="button" onclick="AddRow()">+</button>
-      <button class="w3-btn" type="button" name="button">-</button>
+      <button class="w3-btn" type="button" name="button" onclick="DeleteRow()">-</button>
     </div>
-    <table width="100%">
-      <tr height="100%">
+
+    <table>
+      <tr>
         <td>
           <div id="myGrid" style="width:600px;height:500px;"></div>
         </td>
       </tr>
     </table>
+    <button class="w3-btn" type="button" name="button" style="float : right;">제출</button>
 
 
 
@@ -43,41 +46,146 @@
     </div>
     <div id="grid_here" style="width:550px; height:150px;"></div> -->
 
+    <script src="/SlickGrid-master/lib/firebugx.js"></script>
+
     <script src="/SlickGrid-master/lib/jquery-1.7.min.js"></script>
+    <script src="/SlickGrid-master/lib/jquery-ui-1.8.16.custom.min.js"></script>
     <script src="/SlickGrid-master/lib/jquery.event.drag-2.2.js"></script>
 
+    <script src="/SlickGrid-master/slick.core.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.checkboxselectcolumn.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.autotooltips.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellrangedecorator.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellrangeselector.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellcopymanager.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellselectionmodel.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.rowselectionmodel.js"></script>
+    <script src="/SlickGrid-master/controls/slick.columnpicker.js"></script>
+    <script src="/SlickGrid-master/slick.formatters.js"></script>
+    <script src="/SlickGrid-master/slick.editors.js"></script>
+    <script src="/SlickGrid-master/slick.grid.js"></script>
     <script src="/SlickGrid-master/slick.dataview.js"></script>
 
-    <script src="/SlickGrid-master/slick.core.js"></script>
-    <script src="/SlickGrid-master/slick.grid.js"></script>
+
 
     <script type="text/javascript">
-      var data_view = new Slick.Data.DataView();
-
+      var grid;
+      var dataView = new Slick.Data.DataView();
+      var data = [];
+      var columns = [];
       var columns = [
-        {id : "cash_id", name : "순번", field : "cash_id"},
-        {id : "cash_name", name : "이름", field : "cash_name"},
-        {id : "cash_value", name : "값", field : "cash_value"},
-        {id : "cash_kind", name : "종류", field : "cash_kind"}
+        {id : "id", name : "Id", field : "id"},
+        {id : "cash_name", name : "이름", field : "cash_name", editor: Slick.Editors.Text},
+        {id : "cash_value", name : "값", field : "cash_value", editor: Slick.Editors.Text},
+        {id : "cash_kind", name : "종류", field : "cash_kind", editor: Slick.Editors.Text}
       ];
 
-
-      var data = [];
+      //check box 추가.
+      var checkboxSelector = new Slick.CheckboxSelectColumn({
+      cssClass: "slick-cell-checkboxsel"
+      });
+      columns.unshift(checkboxSelector.getColumnDefinition());
       var options = {
-        enableCellNavgation : true,
-        enableColumnReorder : false
+        editable: true,
+        enableCellNavigation: true,
+        asyncEditorLoading: false,
+        autoEdit: false
       };
-      var gird = new Slick.Grid("#myGrid", data_view, columns, options);
-
+      var num_id=0;
       function AddRow(){
-        data = {
-          "cash_id" : 1,
-          "cash_name" : 2,
-          "cash_value" : 3,
-          "cash_kind" : 4
-        };
-        data_view.insertItem(0,data);
-      };
+        var d = (data[num_id] = {});
+        //dataVeiw에 저장되어있는 값을 보고싶은데.
+        // console.log(dataView.getItems(num_id));
+        d.id = num_id ++;
+        //d.cash_name = 'hi';
+
+        dataView.setItems(data);
+        // console.log(d);
+
+        grid.render();
+      }
+
+      $(function(){
+
+
+        grid = new Slick.Grid("#myGrid",dataView,columns,options);
+        grid.setSelectionModel(new Slick.RowSelectionModel({
+          selectActiveRow : false
+        }));
+        grid.registerPlugin(checkboxSelector);
+        var columpicker = new Slick.Controls.ColumnPicker(columns,grid,options);
+        AddRow();
+
+      });
+
+
+      function DeleteRow(){
+        var selected = grid.getSelectedRows();
+        console.log('selected : ' + selected);
+        grid.setSelectedRows([]);
+        $.each(selected,function(index,value){
+          console.log("Index: " + index)
+          console.log("Value " + value)
+
+          console.log(grid.getData().getItems());
+
+          var item = grid.getData().getItem(value);
+
+          console.log("Item (id: " + item.id + ") is @ index " + value);
+          grid.getData().deleteItem(item.id);
+        })
+        grid.invalidate();
+      }
+
+
+
+      //onload했을때.
+      // $(function(){
+      //
+      //   grid = new Slick.Grid("#myGrid", dataView, columns, options);
+      //   grid.setSelectionModel(new Slick.RowSelectionModel({
+      //   selectActiveRow: false
+      //   }));
+      //   var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
+      //   grid.registerPlugin(checkboxSelector);
+      // });
+
+      //+버튼을 눌렀을때.
+      // function AddRow(){
+      //   var d = (data[num_id] ={});
+      //   d.id = num_id;
+      //   num_id ++;
+      //   dataView.insertItem(num_id,d);
+      //   grid.render();
+      // }
+      //
+      // function DeleteRow(){
+      //   var selected = grid.getSelectedRows();
+      //   grid.setSelectedRows([]);
+      //   $.each(selected,function(index,value){
+      //     console.log("Index: " + index);
+      //     console.log("Value: " + value);
+      //     console.log(grid.getData().getItems());
+      //
+      //     var item = grid.getData().getItem(value);
+      //     console.log("Item (id :)" + item.id + ") is @ index " + value);
+      //     grid.getData().deleteItem(item.id);
+      //   });
+      //   grid.invalidate();
+      // }
+
+      //객체값을 확인하구 싶어요.
+      function JYgetObject(obj){
+        var str = "";
+      	for(key in obj) {
+      		str += key+"="+obj[key]+"\n";
+      	}
+
+      	alert(str);
+      	return;
+      }
+
+
 
 
     </script>
