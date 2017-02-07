@@ -94,6 +94,7 @@
       var num_id=0;
       function AddRow(){
         var d = (data[num_id] = {});
+        console.log(num_id);
         //dataVeiw에 저장되어있는 값을 보고싶은데.
         // console.log(dataView.getItems(num_id));
         d.id = num_id ++;
@@ -103,26 +104,25 @@
         // console.log(d);
 
         grid.render();
+
+
       }
 
       $(function(){
-
-
         grid = new Slick.Grid("#myGrid",dataView,columns,options);
+        console.log(grid);
         grid.setSelectionModel(new Slick.RowSelectionModel({
           selectActiveRow : false
         }));
         grid.registerPlugin(checkboxSelector);
         var columpicker = new Slick.Controls.ColumnPicker(columns,grid,options);
-        AddRow();
-
       });
 
 
       function DeleteRow(){
         var selected = grid.getSelectedRows();
-        console.log('selected : ' + selected);
         grid.setSelectedRows([]);
+        console.log('selected : ' + selected);
         $.each(selected,function(index,value){
           console.log("Index: " + index)
           console.log("Value " + value)
@@ -130,11 +130,13 @@
           console.log(grid.getData().getItems());
 
           var item = grid.getData().getItem(value);
-
-          console.log("Item (id: " + item.id + ") is @ index " + value);
+          if(item.id){
+            console.log("Item (id: " + item.id + ") is @ index " + value);
+          }
           grid.getData().deleteItem(item.id);
         })
         grid.invalidate();
+
       }
 
 
@@ -181,7 +183,7 @@
       		str += key+"="+obj[key]+"\n";
       	}
 
-      	alert(str);
+      	console.log(str);
       	return;
       }
 
