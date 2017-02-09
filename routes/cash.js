@@ -9,25 +9,43 @@ router.get('/', function(req, res, next) {
 
 router.post('/',function(req,res){
   var obj = {};
-
   var request_body = JSON.stringify(req.body);
+  var sql_values = [];
+  var values = [];
   // console.log('body : ' + JSON.stringify(req.body));
   //obj는 Json 객체.
   obj = JSON.parse(request_body);
-  // console.log(obj);
+  console.log(obj);
   // console.log(typeof obj);
-
+  var sql = "INSERT INTO household(cash_id,cash_name,cash_value,cash_kind) VALUES ?";
 
   //obj길이
   var length = obj.grid_values_length;
   // console.log('length : ' + length);
 
   for(var i=0; i<length; i++){
-    console.log('id : '   +   obj['grid_values['+i+'][id]']);
-    console.log('name : ' +  obj['grid_values['+i+'][cash_name]']);
-    console.log('kind : ' +   obj['grid_values['+i+'][cash_kind]']);
+    values.push([
+      obj['grid_values['+i+'][id]'],
+      obj['grid_values['+i+'][cash_name]'],
+      obj['grid_values['+i+'][cash_value]'],
+      obj['grid_values['+i+'][cash_kind]']
+    ]);
+    console.log(values);
+    // console.log('id : '   +   obj['grid_values['+i+'][id]']);
+    // console.log('name : ' +  obj['grid_values['+i+'][cash_name]']);
+    // console.log('kind : ' +   obj['grid_values['+i+'][cash_kind]']);
 
+    connection.query(sql,[values],function(err){
+      if(err) throw err;
+      res.send('1');
+    });
   }
+
+
+
+
+
+
 
 
 

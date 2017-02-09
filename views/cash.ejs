@@ -83,22 +83,33 @@
       var num_id=0;
 
       function AddRow(){
+        // var d = (data[num_id] = {});
+        // console.log(num_id);
+        // //dataVeiw에 저장되어있는 값을 보고싶은데.
+        // // console.log(dataView.getItems(num_id));
+        // var grid_data = grid.getData();
+        // console.log(grid_data);
+        // d.id = num_id ++;
+        // //d.cash_name = 'hi';
+        //
+        // dataView.setItems(data);
+        // console.log(d);
+        // grid.render();
+        //이건 그냥 빈칸만들기..
         var d = (data[num_id] = {});
-        console.log(num_id);
-        //dataVeiw에 저장되어있는 값을 보고싶은데.
-        // console.log(dataView.getItems(num_id));
+        d.id = num_id;
         var grid_data = grid.getData();
-        console.log(grid_data);
-        d['id'] = num_id ++;
-        //d.cash_name = 'hi';
-
-        dataView.setItems(data);
-        console.log(d);
+        num_id ++;
+        dataView.addItem(d);
         grid.render();
       }
 
       $(function(){
         dataView = new Slick.Data.DataView();
+        var item = {
+          "id" : num_id++
+        };
+        console.log(dataView);
         grid = new Slick.Grid("#myGrid",dataView,columns,options);
 
         var columpicker = new Slick.Controls.ColumnPicker(columns,grid,options);
@@ -150,7 +161,6 @@
       }
 
     </script>
-
 
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

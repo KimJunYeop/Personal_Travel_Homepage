@@ -3,7 +3,8 @@ connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : 'k357692',
-  database : 'personal_travel'
+  database : 'personal_travel',
+  multipleStatements : true
 });
 
 module.exports = function(){
