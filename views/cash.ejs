@@ -13,6 +13,8 @@
 
     <link rel="stylesheet" href="/SlickGrid-master/slick.grid.css" type="text/css"/>
     <link rel="stylesheet" href="/SlickGrid-master/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+    <link rel="stylesheet" href="/SlickGrid-master/examples/examples.css" type="text/css"/>
+
 
   </head>
 
@@ -31,20 +33,9 @@
         </td>
       </tr>
     </table>
-    <button class="w3-btn" type="button" name="button" style="float : right;">제출</button>
+    <button onclick = "Submit()" class="w3-btn" type="button" name="button" style="float : right;">제출</button>
 
 
-
-    <!--
-    <br><br>
-
-    <div class="w3-row" style="padding : 10px;">
-      <div class="w3-col s3 w3-green w3-center"><p>id</p></div>
-      <div class="w3-col s3 w3-red w3-center"><p>물품이름</p></div>
-      <div class="w3-col s3 w3-orange w3-center"><p>가격</p></div>
-      <div class="w3-col s3 w3-dark-grey w3-center"><p>종류</p></div>
-    </div>
-    <div id="grid_here" style="width:550px; height:150px;"></div> -->
 
     <script src="/SlickGrid-master/lib/firebugx.js"></script>
 
@@ -70,11 +61,9 @@
 
     <script type="text/javascript">
       var grid;
-      var dataView = new Slick.Data.DataView();
+      var dataView;
       var data = [];
-      var columns = [];
       var columns = [
-        {id : "id", name : "Id", field : "id"},
         {id : "cash_name", name : "이름", field : "cash_name", editor: Slick.Editors.Text},
         {id : "cash_value", name : "값", field : "cash_value", editor: Slick.Editors.Text},
         {id : "cash_kind", name : "종류", field : "cash_kind", editor: Slick.Editors.Text}
@@ -89,93 +78,49 @@
         editable: true,
         enableCellNavigation: true,
         asyncEditorLoading: false,
-        autoEdit: false
+        autoEdit: true,
       };
       var num_id=0;
+
       function AddRow(){
         var d = (data[num_id] = {});
         console.log(num_id);
         //dataVeiw에 저장되어있는 값을 보고싶은데.
         // console.log(dataView.getItems(num_id));
-        d.id = num_id ++;
+        var grid_data = grid.getData();
+        console.log(grid_data);
+        d['id'] = num_id ++;
         //d.cash_name = 'hi';
 
         dataView.setItems(data);
-        // console.log(d);
-
+        console.log(d);
         grid.render();
-
-
       }
 
       $(function(){
+        dataView = new Slick.Data.DataView();
         grid = new Slick.Grid("#myGrid",dataView,columns,options);
-        console.log(grid);
+
+        var columpicker = new Slick.Controls.ColumnPicker(columns,grid,options);
         grid.setSelectionModel(new Slick.RowSelectionModel({
           selectActiveRow : false
         }));
         grid.registerPlugin(checkboxSelector);
-        var columpicker = new Slick.Controls.ColumnPicker(columns,grid,options);
       });
 
 
       function DeleteRow(){
         var selected = grid.getSelectedRows();
         grid.setSelectedRows([]);
-        console.log('selected : ' + selected);
-        $.each(selected,function(index,value){
-          console.log("Index: " + index)
-          console.log("Value " + value)
+        $.each(selected, function (index, value) {
+            console.log("Index: " + index)
+            console.log("Value " + value)
 
-          console.log(grid.getData().getItems());
-
-          var item = grid.getData().getItem(value);
-          if(item.id){
-            console.log("Item (id: " + item.id + ") is @ index " + value);
-          }
-          grid.getData().deleteItem(item.id);
+            grid.getData().deleteItem(value)
         })
-        grid.invalidate();
+        grid.invalidate()
 
       }
-
-
-
-      //onload했을때.
-      // $(function(){
-      //
-      //   grid = new Slick.Grid("#myGrid", dataView, columns, options);
-      //   grid.setSelectionModel(new Slick.RowSelectionModel({
-      //   selectActiveRow: false
-      //   }));
-      //   var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
-      //   grid.registerPlugin(checkboxSelector);
-      // });
-
-      //+버튼을 눌렀을때.
-      // function AddRow(){
-      //   var d = (data[num_id] ={});
-      //   d.id = num_id;
-      //   num_id ++;
-      //   dataView.insertItem(num_id,d);
-      //   grid.render();
-      // }
-      //
-      // function DeleteRow(){
-      //   var selected = grid.getSelectedRows();
-      //   grid.setSelectedRows([]);
-      //   $.each(selected,function(index,value){
-      //     console.log("Index: " + index);
-      //     console.log("Value: " + value);
-      //     console.log(grid.getData().getItems());
-      //
-      //     var item = grid.getData().getItem(value);
-      //     console.log("Item (id :)" + item.id + ") is @ index " + value);
-      //     grid.getData().deleteItem(item.id);
-      //   });
-      //   grid.invalidate();
-      // }
-
       //객체값을 확인하구 싶어요.
       function JYgetObject(obj){
         var str = "";
@@ -183,12 +128,26 @@
       		str += key+"="+obj[key]+"\n";
       	}
 
-      	console.log(str);
+      	console.log('JYgetObject : '+ str);
       	return;
       }
 
-
-
+      //제출 버튼을 눌렀을 때.
+      //그리드 제출 버튼을 눌렀을 때 그리드의 내용이 배열로 넘어간다.
+      //type json grid value from script to server
+      //dataView.getItems에 gird내용이 들어가있는데 이것을 server에
+      //전송해야한다.
+      function Submit(){
+        var grid_values = dataView.getItems();
+        console.log(grid_values);
+        var grid_values_length = grid_values.length;
+        $.ajax({
+          url : "/cash",
+          type : "POST",
+          datatype : 'json',
+          data : {grid_values : grid_values, grid_values_length : grid_values_length}
+        });
+      }
 
     </script>
 
