@@ -14,12 +14,13 @@ router.get(['/','/:id'], function(req, res, next) {
   var sql = 'SELECT * FROM topic WHERE id ='+id;
   var changeObject;
 
-  connection.query(sql,function(err,contents,fields){
+  connection.query(sql,function(err,topics,fields){
     // console.log(contents);
     // console.log(contents[0].filepath);
     // // fs.readFile(contents.filepath,function(req,res){
     // // });
-    res.render('content', { contents : contents });
+
+    res.render('content', { topics : topics });
   });
 });
 

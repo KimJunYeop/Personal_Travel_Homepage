@@ -16,8 +16,12 @@ var _storage = multer.diskStorage({
 var upload = multer({ storage: _storage });
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('write', { title: 'JunYeop' });
+router.get(['/','/:id'], function(req, res, next) {
+  var sql = "SELECT id FROM topic ORDER BY id DESC LIMIT 1";
+  connection.query(sql,function(err,topics,fields){
+    var last_id = topics[0].id + 1;
+    res.render('write',{last_id : last_id});
+  });
 });
 
 //파일업로드.

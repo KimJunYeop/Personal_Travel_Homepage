@@ -27,10 +27,10 @@ router.get(['/','/:id'], function(req, res, next) {
     pageCount = parseInt(rows[0].rowscount/limit + 1);
 
     connection.query(sql,function(err,topics,fields){
-
       if(err) console.error("err : " + err);
       console.log('pageCount : ' + pageCount);
       res.render('main', { title: 'JunYeop' , topics : topics , pageCount : pageCount});
+
     });
   })
 

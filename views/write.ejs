@@ -8,7 +8,7 @@
     <title>JunYeop Travel Blog</title>
 
     <!-- 부트스트랩 -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <link href="/stylesheets/write.css" rel="stylesheet">
     <!-- IE8 에서 HTML5 요소와 미디어 쿼리를 위한 HTML5 shim 와 Respond.js -->
@@ -28,7 +28,7 @@
 
     <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px;">
 
-      <a href = "./cash"><button class="w3-btn w3-round w3-orange w3-right w3-margin">가계부등록</button></a>
+      <button class="w3-btn w3-round w3-orange w3-right w3-margin" onclick="open_popup()">가계부등록</button>
   <!-- <button type='file' class="w3-btn w3-round w3-orange w3-right w3-margin">사진업로드</button> -->
       <form action = '/write' method="post" class="w3-main w3-container w3-padding" enctype="multipart/form-data">
         <label class="glyphicon glyphicon-floppy-disk btn btn-default btn-file w3-right">
@@ -47,11 +47,15 @@
       <input type="file" name="uploadFile">
       <input type="submit" name="Upload">
     </form> -->
-
+    <script type="text/javascript">
+      function open_popup(){
+        window.open("/cash/<%= last_id %>","","width=550, height=700");
+      }
+    </script>
 
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>

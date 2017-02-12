@@ -13,7 +13,6 @@ var main = require('./routes/main');
 var write = require('./routes/write');
 var content = require('./routes/content');
 var cash = require('./routes/cash');
-var hi = require('./routes/hi');
 
 var app = express();
 
@@ -37,11 +36,8 @@ app.use('/main',main);
 app.use('/write',write);
 app.use('/content',content);
 app.use('/cash',cash);
-app.use('/hi',hi);
 
 db();
-
-
 
 
 // 입력하지마라... 죽인다 진짜... error 메세지 다음에 입력하면 입력되지 않는다.
