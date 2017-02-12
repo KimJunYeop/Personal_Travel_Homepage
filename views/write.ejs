@@ -10,13 +10,10 @@
     <!-- 부트스트랩 -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
-    <link href="/stylesheets/write.css" rel="stylesheet">
-    <!-- IE8 에서 HTML5 요소와 미디어 쿼리를 위한 HTML5 shim 와 Respond.js -->
-    <!-- WARNING: Respond.js 는 당신이 file:// 을 통해 페이지를 볼 때는 동작하지 않습니다. -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link href="/stylesheets/cash.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/SlickGrid-master/slick.grid.css" type="text/css"/>
+
   </head>
   <body>
 
@@ -25,15 +22,11 @@
     </nav>
 
     <!-- 사진올리기 글쓰기 form -->
-
-
-
-
     <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px;">
-      <div id="mygrid">
-        123
-        <%= offset %>
-      </div>
+      <h1>여행일지작성</h1>
+      <!-- slick grid  -->
+      <div id="myGrid" style="width : 600px; height : 500px"></div>
+      <p id="offset"></p>
       <button class="w3-btn w3-round w3-orange w3-right w3-margin" onclick="open_popup()">가계부등록</button>
   <!-- <button type='file' class="w3-btn w3-round w3-orange w3-right w3-margin">사진업로드</button> -->
       <form action = '/write' method="post" class="w3-main w3-container w3-padding" enctype="multipart/form-data">
@@ -53,25 +46,7 @@
       <input type="file" name="uploadFile">
       <input type="submit" name="Upload">
     </form> -->
-    <script type="text/javascript">
-      function open_popup(){
-        window.open("/cash/<%= last_id %>","","width=550, height=700");
-      }
 
-      //만약에 offset이 있다면 그리드 출력.
-      if(<%= offset %> == 1){
-        document.getElementById('mygrid').innerHTML = 'hi';
-      }else{
-        //offset이 없다면 그리드 미출력.
-        document.getElementById('mygrid').innerHTML =
-        '<h1>여행일지작성</h1>'
-      }
-
-    </script>
-
-    <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
     <script src="/SlickGrid-master/lib/firebugx.js"></script>
 
     <script src="/SlickGrid-master/lib/jquery-1.7.min.js"></script>
@@ -91,5 +66,44 @@
     <script src="/SlickGrid-master/slick.editors.js"></script>
     <script src="/SlickGrid-master/slick.grid.js"></script>
     <script src="/SlickGrid-master/slick.dataview.js"></script>
+    <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
+
+    <script type="text/javascript">
+      // var grid;
+      // var columns = [
+      //   {id : 'cash_name', name : 'cash_name',  field : 'cash_name'},
+      //   {id : 'cash_value', name : 'cash_value', field : 'cash_value'},
+      //   {id : 'cash_kind', name : 'cash_kind', field : 'cash_kind'}
+      // ];
+      // var options = {
+      //   enableCellNavigation : true,
+      //   enableColumnReorder : false
+      // };
+      // $(function(){
+      //   var data = [];
+      //   for(var i = 0; i < 10; i++){
+      //     data[i] = {
+      //       cash_name : 'task' + i,
+      //       cash_value : 'hi',
+      //       cash_kind : 'hello'
+      //     }
+      //   }
+      //   grid = new Slick.Grid('#myGrid',data,columns,options);
+      // })
+      document.getElementById('offset').innerHTML = window.offset;
+      // 만약에 offset이 있다면 그리드 출력.
+      if(<%= offset %> == 1){
+        document.getElementById('myGrid').style.visibility="visible";
+      }else{
+        //offset이 없다면 그리드 미출력.
+        document.getElementById('myGrid').style.display="none";
+      }
+
+      function open_popup(){
+        window.open("/cash/<%= last_id %>","","width=550, height=700");
+      }
+    </script>
   </body>
 </html>

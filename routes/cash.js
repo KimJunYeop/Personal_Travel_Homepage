@@ -10,7 +10,7 @@ router.get(['/','/:id'], function(req, res, next) {
 });
 
 
-router.post('/',function(req,res){
+/*router.post('/',function(req,res){
   // last insert id
   var obj = {};
   var request_body = JSON.stringify(req.body);
@@ -40,11 +40,11 @@ router.post('/',function(req,res){
   connection.query(sql,[values],function(err){
     if(err) throw err;
     else{
+      console.log('write.js - global.offset = ' + global.offset);
       global.offset = 1;
-      res.send('1');
     }
   })
-})
+})*/
 
 
 module.exports = router;

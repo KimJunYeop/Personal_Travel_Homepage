@@ -79,7 +79,7 @@
         editable: true,
         enableCellNavigation: true,
         asyncEditorLoading: false,
-        autoEdit: true,
+        autoEdit: true
       };
       var num_id=0;
 
@@ -136,11 +136,12 @@
         var grid_values = dataView.getItems();
         console.log(grid_values);
         var grid_values_length = grid_values.length;
+        var offset = 1;
         $.ajax({
-          url : "/cash",
+          url : "/write",
           type : "POST",
           datatype : 'json',
-          data : {grid_values : grid_values, grid_values_length : grid_values_length}
+          data : {grid_values : grid_values, grid_values_length : grid_values_length, offset : offset}
         });
         refreshParent();
       }

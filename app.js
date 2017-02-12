@@ -13,7 +13,6 @@ var main = require('./routes/main');
 var write = require('./routes/write');
 var content = require('./routes/content');
 var cash = require('./routes/cash');
-var global_variable = require('./global');
 
 var app = express();
 
@@ -40,6 +39,7 @@ app.use('/cash',cash);
 
 db();
 
+//전역변수
 
 // 입력하지마라... 죽인다 진짜... error 메세지 다음에 입력하면 입력되지 않는다.
 // 아니 비절차적 언어 아니야? 절차적언어야?
