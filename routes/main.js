@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+
+global.offset = 0;
+
 /* GET home page. */
 router.get(['/','/:id'], function(req, res, next) {
   var rowsCount = "SELECT count(*) AS rowscount FROM topic";

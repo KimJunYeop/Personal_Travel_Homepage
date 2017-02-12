@@ -20,7 +20,7 @@ router.get(['/','/:id'], function(req, res, next) {
   var sql = "SELECT id FROM topic ORDER BY id DESC LIMIT 1";
   connection.query(sql,function(err,topics,fields){
     var last_id = topics[0].id + 1;
-    res.render('write',{last_id : last_id});
+    res.render('write',{last_id : last_id , offset : global.offset});
   });
 });
 

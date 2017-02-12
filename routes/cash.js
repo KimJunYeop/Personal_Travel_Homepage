@@ -40,6 +40,7 @@ router.post('/',function(req,res){
   connection.query(sql,[values],function(err){
     if(err) throw err;
     else{
+      global.offset = 1;
       res.send('1');
     }
   })

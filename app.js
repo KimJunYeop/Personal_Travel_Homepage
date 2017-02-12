@@ -13,6 +13,7 @@ var main = require('./routes/main');
 var write = require('./routes/write');
 var content = require('./routes/content');
 var cash = require('./routes/cash');
+var global_variable = require('./global');
 
 var app = express();
 

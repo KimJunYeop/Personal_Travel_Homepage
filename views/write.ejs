@@ -26,8 +26,14 @@
 
     <!-- 사진올리기 글쓰기 form -->
 
-    <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px;">
 
+
+
+    <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px;">
+      <div id="mygrid">
+        123
+        <%= offset %>
+      </div>
       <button class="w3-btn w3-round w3-orange w3-right w3-margin" onclick="open_popup()">가계부등록</button>
   <!-- <button type='file' class="w3-btn w3-round w3-orange w3-right w3-margin">사진업로드</button> -->
       <form action = '/write' method="post" class="w3-main w3-container w3-padding" enctype="multipart/form-data">
@@ -51,11 +57,39 @@
       function open_popup(){
         window.open("/cash/<%= last_id %>","","width=550, height=700");
       }
+
+      //만약에 offset이 있다면 그리드 출력.
+      if(<%= offset %> == 1){
+        document.getElementById('mygrid').innerHTML = 'hi';
+      }else{
+        //offset이 없다면 그리드 미출력.
+        document.getElementById('mygrid').innerHTML =
+        '<h1>여행일지작성</h1>'
+      }
+
     </script>
 
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/SlickGrid-master/lib/firebugx.js"></script>
+
+    <script src="/SlickGrid-master/lib/jquery-1.7.min.js"></script>
+    <script src="/SlickGrid-master/lib/jquery-ui-1.8.16.custom.min.js"></script>
+    <script src="/SlickGrid-master/lib/jquery.event.drag-2.2.js"></script>
+
+    <script src="/SlickGrid-master/slick.core.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.checkboxselectcolumn.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.autotooltips.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellrangedecorator.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellrangeselector.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellcopymanager.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellselectionmodel.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.rowselectionmodel.js"></script>
+    <script src="/SlickGrid-master/controls/slick.columnpicker.js"></script>
+    <script src="/SlickGrid-master/slick.formatters.js"></script>
+    <script src="/SlickGrid-master/slick.editors.js"></script>
+    <script src="/SlickGrid-master/slick.grid.js"></script>
+    <script src="/SlickGrid-master/slick.dataview.js"></script>
   </body>
 </html>

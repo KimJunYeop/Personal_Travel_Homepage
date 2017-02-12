@@ -84,19 +84,6 @@
       var num_id=0;
 
       function AddRow(){
-        // var d = (data[num_id] = {});
-        // console.log(num_id);
-        // //dataVeiw에 저장되어있는 값을 보고싶은데.
-        // // console.log(dataView.getItems(num_id));
-        // var grid_data = grid.getData();
-        // console.log(grid_data);
-        // d.id = num_id ++;
-        // //d.cash_name = 'hi';
-        //
-        // dataView.setItems(data);
-        // console.log(d);
-        // grid.render();
-        //이건 그냥 빈칸만들기..
         var d = (data[num_id] = {});
         d.id = num_id++;
         d.real_id = id;
@@ -155,9 +142,17 @@
           datatype : 'json',
           data : {grid_values : grid_values, grid_values_length : grid_values_length}
         });
-        window.close();
+        refreshParent();
       }
 
+      //부모창 새로고침.
+      function refreshParent() {
+        window.opener.location.href = window.opener.location.href;
+        if (window.opener.progressWindow) {
+          window.opener.progressWindow.close()
+        }
+        window.close();
+      }
     </script>
 
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
