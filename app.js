@@ -37,6 +37,9 @@ app.use('/write',write);
 app.use('/content',content);
 app.use('/cash',cash);
 
+
+global.offset = 0;
+
 db();
 
 //전역변수

@@ -1,1 +1,1 @@
-global.offset = 0;
+global.jy = 1;

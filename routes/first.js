@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 
-global.offset = 0;
 
 
 /* GET home page. */

@@ -16,16 +16,24 @@ var _storage = multer.diskStorage({
 });
 var upload = multer({ storage: _storage });
 
+var obj = {};
+var request_body=null;
+var values = new Array();
+var length=0;
 
 
 /* GET home page. */
 router.get(['/','/:id'], function(req, res, next) {
   var sql = "SELECT id FROM topic ORDER BY id DESC LIMIT 1";
-  var offset_1 = app.locals.offset;
-  console.log('offset_1 : ' + offset_1);
   connection.query(sql,function(err,topics,fields){
     var last_id = topics[0].id + 1;
-    res.render('write',{last_id : last_id});
+    //last_id = 마지막 id +1
+    //offset = 가계부 등록여부
+    //obj = 가계부 값.
+    console.log('router.get obj parse : ' + obj);
+    console.log('router.get obj stringfy :' + request_body);
+    console.log(values);
+    res.render('write',{last_id : last_id , values : values , length : length});
   });
 });
 
@@ -38,21 +46,21 @@ router.post('/',upload.single('userfile'),function(req,res){
   //다시짜야되는데.... 조건문 넣어가지구.
   //req.body가 있다면  아니면 없다면으로.
   //이것도 offset으로 하면되겠다.
-  var obj = {};
-  var request_body = JSON.stringify(req.body);
-  var sql_values = [];
-  var values = [];
+  request_body = JSON.stringify(req.body);
   // console.log('body : ' + JSON.stringify(req.body));
   //obj는 Json 객체.
   obj = JSON.parse(request_body);
-  console.log('global.offset : ' + global.offset);
-  var offset = obj.offset;
-  res.render('write',{offset : offset});
+  offset = obj.offset;
+  length = obj.grid_values_length;
 
-  console.log(obj);
-  app.locals.offset = obj.offset;
-  console.log('app.locals.offset : ' + app.locals.offset);
-
+  for(var i=0; i<length; i++){
+    values.push([
+      obj['grid_values['+i+'][real_id]'],
+      obj['grid_values['+i+'][cash_name]'],
+      obj['grid_values['+i+'][cash_value]'],
+      obj['grid_values['+i+'][cash_kind]']
+    ]);
+  }
 
   //offset 변경
   // app.locals.offset = obj.offset;
@@ -74,6 +82,7 @@ router.post('/',upload.single('userfile'),function(req,res){
     if(err){
       console.log(err);
     }else{
+      offset = 0;
       res.redirect('/write');
     }
   });

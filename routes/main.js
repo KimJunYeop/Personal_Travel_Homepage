@@ -4,7 +4,8 @@ var app = express();
 
 /* GET home page. */
 router.get(['/','/:id'], function(req, res, next) {
-  app.locals.offset = 0;
+
+  offset = 0;
   var rowsCount = "SELECT count(*) AS rowscount FROM topic";
   var pageCount;
   var limit = 6;
