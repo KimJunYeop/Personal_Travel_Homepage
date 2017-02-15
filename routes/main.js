@@ -6,6 +6,7 @@ var app = express();
 router.get(['/','/:id'], function(req, res, next) {
 
   offset = 0;
+  console.log('main offset : ' + offset);
   var rowsCount = "SELECT count(*) AS rowscount FROM topic";
   var pageCount;
   var limit = 6;
