@@ -38,7 +38,6 @@ app.use('/content',content);
 app.use('/cash',cash);
 
 
-global.offset = 0;
 
 db();
 

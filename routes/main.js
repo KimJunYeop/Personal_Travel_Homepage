@@ -5,8 +5,6 @@ var app = express();
 /* GET home page. */
 router.get(['/','/:id'], function(req, res, next) {
 
-  offset = 0;
-  console.log('main offset : ' + offset);
   var rowsCount = "SELECT count(*) AS rowscount FROM topic";
   var pageCount;
   var limit = 6;
@@ -21,7 +19,7 @@ router.get(['/','/:id'], function(req, res, next) {
   console.log('offsetCount : ' + offsetCount);
   //main 바로 들어갔을때랑 page가 있을때를 나눠줘야한다.
 
-  var sql = "SELECT * FROM topic ORDER BY date LIMIT " + limit + " OFFSET " + offsetCount;
+  var sql = "SELECT * FROM topic ORDER BY date DESC LIMIT " + limit + " OFFSET " + offsetCount;
   console.log('sql :' + "SELECT * FROM topic ORDER BY date LIMIT " + limit + " OFFSET " + offsetCount);
 
   connection.query(rowsCount,function(err,rows,fiels){

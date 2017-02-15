@@ -16,34 +16,34 @@ var _storage = multer.diskStorage({
 });
 var upload = multer({ storage: _storage });
 
-var obj = {};
-var request_body=null;
 var values = new Array();
-var length=0;
+var length = 0;
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get(['/','/:id'], function(req, res, next) {
+  var id = req.params.id;
+  console.log('*id : ' + id);
   var sql = "SELECT id FROM topic ORDER BY id DESC LIMIT 1";
   connection.query(sql,function(err,topics,fields){
     var last_id = topics[0].id + 1;
     //last_id = 마지막 id +1
     //offset = 가계부 등록여부
     //obj = 가계부 값.
-    console.log('router.get obj parse : ' + obj);
-    console.log('router.get obj stringfy :' + request_body);
-    console.log(values);
-
     res.render('write',{last_id : last_id , values : values , length : length});
+
   });
 });
 
 //파일업로드.
 router.post(['/','/:id'],upload.single('userfile'),function(req,res){
+  var obj = {};
   var id = req.params.id;
   var title = req.body.title;
   var description = req.body.description;
   var date = moment().subtract(10, 'days').calendar();
+  var request_body;
+
   //id가 있다면..
   //cash.ejs에서 넘겨준다.
   if(id){
@@ -85,15 +85,36 @@ router.post(['/','/:id'],upload.single('userfile'),function(req,res){
   console.log(date);
 
   var sql = "INSERT INTO topic(title,description,date,filepath) VALUES(?,?,?,?)";
-  connection.query(sql,[title,description,date,filepath],function(err,result,fields){
-    if(err){
-      console.log(err);
-    }else{
-      offset = 0;
-      res.redirect('/write');
-    }
-  });
+  var sql_values = [];
+  var sql_cash = "INSERT INTO household(cash_id,cash_name,cash_value,cash_kind) VALUES ?";
+
+  if(id==undefined){
+    //topics INSERT
+    connection.query(sql,[title,description,date,filepath],function(err,result,fields){
+      if(err){
+        console.log(err);
+      }else{
+        offset = 0;
+        res.redirect('/write');
+      }
+    });
+  }else{
+    //household topics INSERT
+    connection.query(sql,[title,description,date,filepath],function(err,result,fields){
+      if(err){
+        console.log(err);
+      }
+      connection.query(sql_cash,[values],function(err,results,fields){
+        if(err){
+          console.log(err);
+        }
+        offset = 0;
+        res.redirect('/main');
+      })
+    })
+  }
 });
+
 //이미 라우팅이 되어있다.. 시발거...
 
 //write insert

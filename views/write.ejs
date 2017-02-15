@@ -81,17 +81,13 @@
         enableColumnReorder : false
       };
       var num = 1;
+
       var values =new Array();
       values = [<%- values %>];
-      var test = new Array();
-      test = [0,'hi','hello',3];
-      if(test === undefined){
-        console.log('1');
-      }
 
       $(function(){
          var data = [];
-         for(var i = 0; i < <%=length%>; i++){
+         for(var i = 0; i < <%= length %>; i++){
            data[i] = {
              cash_name : values[(i*4)+1],
              cash_value : values[(i*4)+2],
@@ -104,7 +100,7 @@
 
 
       // 만약에 offset이 있다면 그리드 출력.
-      if(<%= offset %> == 1){
+      if(<%= length %> > 0){
         document.getElementById('myGrid').style.visibility="visible";
 
       }else{
