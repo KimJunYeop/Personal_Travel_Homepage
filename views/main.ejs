@@ -27,10 +27,10 @@
    <div class="w3-row-padding w3-padding-16 w3-center" id="food">
        <div class="w3-row-padding w3-padding-16 w3-center">
          <!-- 여기다가 for문을 넣어준다. -->
-         <% for(var i=0 ; i<parseInt(topics.length/2); i++){ %>
+         <% for(var i=0 ; i<first; i++){ %>
            <div class="w3-quarter">
             <a href="/content/<%= topics[i].id %>">
-              <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%; height:25%;" class="w3-hover-sepia">
+              <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%;" class="w3-hover-sepia">
               <h3><%= topics[i].title %></h3>
             </a>
            </div>
@@ -38,10 +38,10 @@
       </div>
       <!-- 4개마다 넘겨줘야한다. -->
       <div class="w3-row-padding w3-padding-16 w3-center">
-        <% for(var i=4 ; i<topics.length; i++){ %>
+        <% for(var i=4 ; i<second; i++){ %>
           <div class="w3-quarter">
            <a href="/content/<%= topics[i].id %>">
-             <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%; height:25%;" class="w3-hover-sepia">
+             <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%;" class="w3-hover-sepia">
              <h3><%= topics[i].title %></h3>
            </a>
           </div>
