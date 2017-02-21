@@ -38,7 +38,7 @@
       </header>
 
       <div class="w3-row">
-        <div class="w3-col 18 s9">
+        <div class="w3-col 18 s8">
           <div class="w3-card-4 w3-margin w3-white">
             <img src="/<%= topics[0].filepath %>" style="width:100%">
           </div>
@@ -51,29 +51,41 @@
           </div>
         </div>
 
-        <div class="w3-col 14 s3">
-          <div class="w3-card-4 w3-margin w3-blue">
-            <div class="row">
-              <div class="col-md-4">
-                cash_name
-              </div>
-              <div class="col-md-4">
-                cash_value
-              </div>
-              <div class="col-md-4">
-                cash_kind
-              </div>
-            </div>
+        <div class="w3-col 14 s4">
+          <div class="w3-card-4 w3-margin">
+            <div class="w3-green w3-center">가계부</div>
+            <table class="w3-table w3-striped w3-border">
+              <tr>
+                <th>name</th>
+                <th>value</th>
+                <th>kind</th>
+              </tr>
+
+              <!-- 값에대한 for문을 넣는다. -->
+              <% for(var i=0 ; i<topics.length; i++){ %>
+              <tr>
+                <th> <%= topics[i].cash_name %> </th>
+                <th> <%= topics[i].cash_value %> </th>
+                <th> <%= topics[i].cash_kind %> </th> 
+              </tr>
+              <% } %>
+            </table>
           </div>
         </div>
       </div>
     </div>
 
 
+    </script>
 
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+
   </body>
 </html>

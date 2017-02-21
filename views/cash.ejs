@@ -25,7 +25,6 @@
       <button class="w3-btn" type="button" name="button" onclick="AddRow()">+</button>
       <button class="w3-btn" type="button" name="button" onclick="DeleteRow()">-</button>
     </div>
-
     <table>
       <tr>
         <td>
@@ -138,12 +137,12 @@
         var grid_values_length = grid_values.length;
         var offset = 1;
         $.ajax({
-          url : "/write/1",
+          url : "/write/household",
           type : "POST",
           datatype : 'json',
           data : {grid_values : grid_values, grid_values_length : grid_values_length, offset : offset}
         });
-        refreshParent();
+        window.close();
       }
 
       //부모창 새로고침.

@@ -13,6 +13,7 @@ var main = require('./routes/main');
 var write = require('./routes/write');
 var content = require('./routes/content');
 var cash = require('./routes/cash');
+var cash_write = require('./routes/cash_write');
 
 var app = express();
 
@@ -36,7 +37,7 @@ app.use('/main',main);
 app.use('/write',write);
 app.use('/content',content);
 app.use('/cash',cash);
-
+app.use('/cash_write',cash_write);
 
 
 db();

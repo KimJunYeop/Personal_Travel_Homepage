@@ -18,60 +18,52 @@ var upload = multer({ storage: _storage });
 
 var values = new Array();
 var length = 0;
+var last_id;
 
 
 /* GET home page. */
 router.get(['/','/:id'], function(req, res, next) {
   var id = req.params.id;
-  console.log('*id : ' + id);
-  var sql = "SELECT id FROM topic ORDER BY id DESC LIMIT 1";
-  connection.query(sql,function(err,topics,fields){
-    var last_id = topics[0].id + 1;
-    //last_id = 마지막 id +1
-    //offset = 가계부 등록여부
-    //obj = 가계부 값.
-    res.render('write',{last_id : last_id , values : values , length : length});
+  var last_id_sql ="SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'personal_travel' AND TABLE_NAME = 'topic'"
 
+  connection.query(last_id_sql,function(err,topics,fields){
+    console.log('topics : ' + topics);
+    console.log(topics[0].AUTO_INCREMENT);
+    //topics[0].ATUO_INCREMENT 로 하면됩니다.
+    res.render('write',{last_id : topics[0].AUTO_INCREMENT , values : values , length : length});
   });
+});
+
+//여기로 넣고?
+//cash를 여기로 넣고 post '/'로 변수를 넘겨준다?
+router.post('/household',function(req,res){
+  var request_body;
+  var obj = {};
+
+  request_body = JSON.stringify(req.body);
+  // console.log('body : ' + JSON.stringify(req.body));
+  //obj는 Json 객체.
+  obj = JSON.parse(request_body);
+  offset = obj.offset;
+  console.log('if cash submit offset : ' + offset);
+  length = obj.grid_values_length;
+
+  for(var i=0; i<length; i++){
+    values.push([
+      obj['grid_values['+i+'][real_id]'],
+      '"'+obj['grid_values['+i+'][cash_name]']+'"',
+      obj['grid_values['+i+'][cash_value]'],
+      obj['grid_values['+i+'][cash_kind]']
+    ]);
+  }
 });
 
 //파일업로드.
 router.post(['/','/:id'],upload.single('userfile'),function(req,res){
-  var obj = {};
   var id = req.params.id;
   var title = req.body.title;
   var description = req.body.description;
   var date = moment().subtract(10, 'days').calendar();
-  var request_body;
-
-  //id가 있다면..
-  //cash.ejs에서 넘겨준다.
-  if(id){
-    //다시짜야되는데.... 조건문 넣어가지구.
-    //req.body가 있다면  아니면 없다면으로.
-    //이것도 offset으로 하면되겠다.
-    request_body = JSON.stringify(req.body);
-    // console.log('body : ' + JSON.stringify(req.body));
-    //obj는 Json 객체.
-    obj = JSON.parse(request_body);
-    offset = obj.offset;
-    console.log('if cash submit offset : ' + offset);
-    length = obj.grid_values_length;
-
-    for(var i=0; i<length; i++){
-      values.push([
-        obj['grid_values['+i+'][real_id]'],
-        '"'+obj['grid_values['+i+'][cash_name]']+'"',
-        obj['grid_values['+i+'][cash_value]'],
-        obj['grid_values['+i+'][cash_kind]']
-      ]);
-    }
-    console.log('values : ' + values);
-
-    //offset 변경
-    // app.locals.offset = obj.offset;
-    // console.log('app.locals.offset : ' + app.locals.offset);
-  }
 
 
   if(req.file){
@@ -82,46 +74,23 @@ router.post(['/','/:id'],upload.single('userfile'),function(req,res){
     console.log('empty file');
   }
 
-  console.log(date);
-
   var sql = "INSERT INTO topic(title,description,date,filepath) VALUES(?,?,?,?)";
   var sql_values = [];
   var sql_cash = "INSERT INTO household(cash_id,cash_name,cash_value,cash_kind) VALUES ?";
 
-  if(id==undefined){
-    //topics INSERT
-    connection.query(sql,[title,description,date,filepath],function(err,result,fields){
-      if(err){
-        console.log(err);
-      }else{
-        offset = 0;
-        res.redirect('/write');
-      }
-    });
-  }else{
-    //household topics INSERT
-    connection.query(sql,[title,description,date,filepath],function(err,result,fields){
+  //household topics INSERT
+  connection.query(sql,[title,description,date,filepath],function(err,result,fields){
+    if(err){
+      console.log(err);
+    }
+    connection.query(sql_cash,[values],function(err,results,fields){
       if(err){
         console.log(err);
       }
-      connection.query(sql_cash,[values],function(err,results,fields){
-        if(err){
-          console.log(err);
-        }
-        offset = 0;
-        res.redirect('/main');
-      })
+      offset = 0;
+      res.redirect('/main');
     })
-  }
+  })
 });
-
-//이미 라우팅이 되어있다.. 시발거...
-
-//write insert
-
-// router.post('/',function(req,res,next){
-//   var title = req.body.title;
-//   res.send(title);
-// });
 
 module.exports = router;
