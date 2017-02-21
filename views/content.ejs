@@ -19,10 +19,7 @@
     <![endif]-->
   </head>
   <body>
-    <nav>
-      <% include ./navbar %>
-    </nav>
-    <br>
+    <% include ./navbar %>
     <div class="w3-content" style="max-width : 1300px">
       <header class="w3-container w3-center w3-padding-32">
         <h1>
@@ -55,20 +52,29 @@
           <div class="w3-card-4 w3-margin">
             <div class="w3-green w3-center">가계부</div>
             <table class="w3-table w3-striped w3-border">
+              <% if(household.length > 0){ %>
               <tr>
                 <th>name</th>
                 <th>value</th>
                 <th>kind</th>
               </tr>
 
-              <!-- 값에대한 for문을 넣는다. -->
-              <% for(var i=0 ; i<topics.length; i++){ %>
-              <tr>
-                <th> <%= topics[i].cash_name %> </th>
-                <th> <%= topics[i].cash_value %> </th>
-                <th> <%= topics[i].cash_kind %> </th> 
-              </tr>
+
+                <!-- 값에대한 for문을 넣는다. -->
+              <% for(var i=0 ; i<household.length; i++){ %>
+                <tr>
+                  <th> <%= household[i].cash_name %> </th>
+                  <th> <%= household[i].cash_value %> </th>
+                  <th> <%= household[i].cash_kind %> </th>
+                </tr>
               <% } %>
+              <% } else{ %>
+                <div class="w3-panel">
+                  <h5 class="w3-center"><b>가계부를 등록하세요.</b></h5>
+                </div>
+
+              <% } %>
+
             </table>
           </div>
         </div>

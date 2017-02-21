@@ -22,27 +22,34 @@
   </head>
   <body>
     <!-- navbar 개발 시 분류 추가 -->
-    <nav>
-      <% include ./navbar %>
-    </nav>
-
-  <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px;">
+  <% include ./navbar %>
+  <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
+   <div class="w3-row-padding w3-padding-16 w3-center" id="food">
        <div class="w3-row-padding w3-padding-16 w3-center">
          <!-- 여기다가 for문을 넣어준다. -->
-         <% for(var i=0 ; i<topics.length; i++){ %>
-           <div class="w3-third">
+         <% for(var i=0 ; i<parseInt(topics.length/2); i++){ %>
+           <div class="w3-quarter">
             <a href="/content/<%= topics[i].id %>">
-              <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%; height : 100px">
+              <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%; height:25%;" class="w3-hover-sepia">
               <h3><%= topics[i].title %></h3>
-              <p><%= topics[i].description %></p>
             </a>
            </div>
          <% } %>
-
       </div>
-       <div class="w3-row-padding w3-padding-16 w3-center">
-       </div>
+      <!-- 4개마다 넘겨줘야한다. -->
+      <div class="w3-row-padding w3-padding-16 w3-center">
+        <% for(var i=4 ; i<topics.length; i++){ %>
+          <div class="w3-quarter">
+           <a href="/content/<%= topics[i].id %>">
+             <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%; height:25%;" class="w3-hover-sepia">
+             <h3><%= topics[i].title %></h3>
+           </a>
+          </div>
+        <% } %>
+      </div>
+
     </div>
+  </div>
 
 
     <!-- Pagination -->
@@ -54,13 +61,13 @@
       </ul>
     </div>
 
-    <srcipt src="text/javascript">
-
-    </script>
 
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
   </body>
 </html>

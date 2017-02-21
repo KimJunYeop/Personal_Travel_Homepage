@@ -13,17 +13,14 @@ router.get(['/','/:id'], function(req, res, next) {
 
   var id = req.params.id;
   //sql에서 household와 topic을 join 시킨다.
-  var sql_join = "SELECT topic.title,topic.description,topic.date,topic.filepath, household.cash_name,household.cash_value,household.cash_kind FROM topic INNER JOIN household ON topic.id = household.cash_id"
+  var sql_join = "SELECT topic.title,topic.description,topic.date,topic.filepath, household.cash_name,household.cash_value,household.cash_kind FROM topic INNER JOIN household ON topic.id = household.cash_id WHERE topic.id = " + id;
+  var sql = "SELECT * FROM topic WHERE id = "+id;
   var changeObject;
 
-  connection.query(sql_join,function(err,topics,fields){
-    for(var i=0; i<topics.length; i++){
-      // trim(topics[i].cash_name);
-      console.log(topics[i].cash_name)
-      console.log(Type(topics[i].cash_name));
-    }
-
-    res.render('content', { topics : topics });
+  connection.query(sql,function(err,topics,fields){
+    connection.query(sql_join,function(err,household,fields){
+      res.render('content', { topics : topics, household : household });
+    });
   });
 });
 

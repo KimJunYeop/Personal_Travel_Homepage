@@ -51,7 +51,7 @@ router.post('/household',function(req,res){
   for(var i=0; i<length; i++){
     values.push([
       obj['grid_values['+i+'][real_id]'],
-      '"'+obj['grid_values['+i+'][cash_name]']+'"',
+      obj['grid_values['+i+'][cash_name]'],
       obj['grid_values['+i+'][cash_value]'],
       obj['grid_values['+i+'][cash_kind]']
     ]);
