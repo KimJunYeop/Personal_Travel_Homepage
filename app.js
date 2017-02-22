@@ -14,6 +14,8 @@ var write = require('./routes/write');
 var content = require('./routes/content');
 var cash = require('./routes/cash');
 var cash_write = require('./routes/cash_write');
+var hi = require('./routes/hi');
+
 
 var app = express();
 
@@ -38,6 +40,8 @@ app.use('/write',write);
 app.use('/content',content);
 app.use('/cash',cash);
 app.use('/cash_write',cash_write);
+app.use('/hi',hi);
+app.use('/modify',content);
 
 
 db();

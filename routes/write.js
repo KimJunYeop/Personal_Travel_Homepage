@@ -22,8 +22,7 @@ var last_id;
 
 
 /* GET home page. */
-router.get(['/','/:id'], function(req, res, next) {
-  var id = req.params.id;
+router.get('/', function(req, res, next) {
   var last_id_sql ="SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'personal_travel' AND TABLE_NAME = 'topic'"
 
   connection.query(last_id_sql,function(err,topics,fields){
@@ -44,8 +43,6 @@ router.post('/household',function(req,res){
   // console.log('body : ' + JSON.stringify(req.body));
   //obj는 Json 객체.
   obj = JSON.parse(request_body);
-  offset = obj.offset;
-  console.log('if cash submit offset : ' + offset);
   length = obj.grid_values_length;
 
   for(var i=0; i<length; i++){
@@ -87,7 +84,6 @@ router.post(['/','/:id'],upload.single('userfile'),function(req,res){
       if(err){
         console.log(err);
       }
-      offset = 0;
       res.redirect('/main');
     })
   })

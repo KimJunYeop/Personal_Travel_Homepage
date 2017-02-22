@@ -13,43 +13,37 @@
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <link href="/stylesheets/main.css" rel="stylesheet">
 
-    <!-- IE8 에서 HTML5 요소와 미디어 쿼리를 위한 HTML5 shim 와 Respond.js -->
-    <!-- WARNING: Respond.js 는 당신이 file:// 을 통해 페이지를 볼 때는 동작하지 않습니다. -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
   <body>
     <!-- navbar 개발 시 분류 추가 -->
-  <% include ./navbar %>
-  <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
-   <div class="w3-row-padding w3-padding-16 w3-center" id="food">
-       <div class="w3-row-padding w3-padding-16 w3-center">
-         <!-- 여기다가 for문을 넣어준다. -->
-         <% for(var i=0 ; i<first; i++){ %>
-           <div class="w3-quarter">
-            <a href="/content/<%= topics[i].id %>">
-              <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%;" class="w3-hover-sepia">
-              <h3><%= topics[i].title %></h3>
-            </a>
-           </div>
-         <% } %>
-      </div>
-      <!-- 4개마다 넘겨줘야한다. -->
-      <div class="w3-row-padding w3-padding-16 w3-center">
-        <% for(var i=4 ; i<second; i++){ %>
-          <div class="w3-quarter">
-           <a href="/content/<%= topics[i].id %>">
-             <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%;" class="w3-hover-sepia">
-             <h3><%= topics[i].title %></h3>
-           </a>
-          </div>
-        <% } %>
-      </div>
+    <% include ./navbar %>
+    <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
+     <div class="w3-row-padding w3-padding-16 w3-center" id="food">
+         <div class="w3-row-padding w3-padding-16 w3-center">
+           <!-- 여기다가 for문을 넣어준다. -->
+           <% for(var i=0 ; i<first; i++){ %>
+             <div class="w3-quarter">
+              <a href="/content/<%= topics[i].id %>">
+                <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%;" class="w3-hover-sepia">
+                <h3><%= topics[i].title %></h3>
+              </a>
+             </div>
+           <% } %>
+        </div>
+        <!-- 4개마다 넘겨줘야한다. -->
+        <div class="w3-row-padding w3-padding-16 w3-center">
+          <% for(var i=4 ; i<second; i++){ %>
+            <div class="w3-quarter">
+             <a href="/content/<%= topics[i].id %>">
+               <img src="<%= topics[i].filepath %>" alt="Sandwich" style="width:100%;" class="w3-hover-sepia">
+               <h3><%= topics[i].title %></h3>
+             </a>
+            </div>
+          <% } %>
+        </div>
 
+      </div>
     </div>
-  </div>
 
 
     <!-- Pagination -->

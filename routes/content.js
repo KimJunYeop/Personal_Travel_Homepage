@@ -19,10 +19,60 @@ router.get(['/','/:id'], function(req, res, next) {
 
   connection.query(sql,function(err,topics,fields){
     connection.query(sql_join,function(err,household,fields){
-      res.render('content', { topics : topics, household : household });
+      res.render('content', { topics : topics, household : household, id : id});
     });
   });
 });
+
+
+
+/*
+  Content에서 삭제를 누를시 이곳으로 들어온다.
+*/
+router.get('/delete/:id',function(req,res,next){
+  var id = req.params.id;
+  console.log('delete id : ' + id);
+  var topic_sql = "DELETE FROM topic WHERE id = " + id;
+  var household_sql = "DELETE FROM household WHERE cash_id = " + id;
+
+  connection.query(topic_sql,function(err,result,fields){
+    if(err) throw err;
+    console.log('deleted topic ' + result.affectedRows + ' rows');
+    connection.query(household_sql,function(err,result,fields){
+      console.log('deleted household ' + result.affectedRows + ' rows');
+      res.redirect('/main');
+    })
+  })
+});
+
+
+/*
+  Content에서 수정을 누를시 이곳으로 들어온다.
+*/
+router.get('/modify/:id',function(req,res,next){
+  var id = req.params.id;
+  console.log(id);
+  //일단 글만 수정하게 만들고 가계부로 가자.
+  var sql_topic = "SELECT * FROM topic WHERE id =" + id;
+  var sql_household = "SELECT * FROM household WHERE cash_id = " + id;
+
+  connection.query(sql_topic,function(err,topics,fields){
+    if(err) throw err;
+    connection.query(sql_household,function(err,households,fields){
+      if(err) throw err;
+      res.render('modify',{topics:topics,households:households,id:id});
+    })
+  });
+});
+
+router.post('/modify/:id',function(req,res,next){
+  var title = req.body.title;
+  var description = req.body.description;
+  var id = req.params.id;
+  var sql_update = "UPDATE topic SET title = ?, description = ? WHERE id = " + id;
+  console.log(title);
+});
+
 
 function trim(str){
   return str.toString().replace(/"/g,"");

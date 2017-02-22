@@ -19,11 +19,11 @@
 
     <!-- 사진올리기 글쓰기 form -->
     <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px;">
-      <h1>여행일지작성</h1>
+      <h1>여행일지수정</h1>
       <!-- slick grid  -->
-      <button class="w3-btn w3-round w3-orange w3-right w3-margin" onclick="open_popup()">가계부등록</button>
+      <button class="w3-btn w3-round w3-orange w3-right w3-margin" onclick="open_popup()">가계부수정</button>
   <!-- <button type='file' class="w3-btn w3-round w3-orange w3-right w3-margin">사진업로드</button> -->
-      <form action = '/write' method="post" class="w3-main w3-container w3-padding" enctype="multipart/form-data">
+      <form action = '/content/modify/:<%= id %>' method="post" class="w3-main w3-container w3-padding" enctype="multipart/form-data">
         <label class="glyphicon glyphicon-floppy-disk btn btn-default btn-file w3-right">
             업로드<input name='userfile'type="file" style="display: none;">
         </label>
@@ -31,7 +31,7 @@
         <input class="w3-input w3-border w3-round" type="text" name="title">
         <label class="w3-label w3-text-black w3-padding">본문</label>
       	<textarea name="description" class="form-control col-sm-5" rows="10"></textarea>
-        <button class="w3-btn w3-orange w3-margin" type="submit" style="float : right; ">Register</button>
+        <button class="w3-btn w3-orange w3-margin" type="submit" style="float : right; ">Modify</button>
       </form>
     </div>
 
@@ -46,9 +46,10 @@
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
 
     <script type="text/javascript">
-      function open_popup(){
-        window.open("/cash/<%= last_id %>","","width=550, height=700");
-      }
+      var theForm = document.forms[0];
+      theForm.title.value = `<%= topics[0].title %>`;
+      theForm.description.value = `<%= topics[0].description %>`;
+
     </script>
   </body>
 </html>
