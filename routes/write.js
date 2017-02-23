@@ -20,6 +20,14 @@ var values = new Array();
 var length = 0;
 var last_id;
 
+function setValues(values){
+  values = values;
+}
+
+function getValues(values){
+  return values;
+}
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -33,27 +41,40 @@ router.get('/', function(req, res, next) {
   });
 });
 
+// 가계부 등록 팝업.
+router.get('/cash/:id',function(req,res,next){
+  var id = req.params.id;
+  console.log('id : ' + id);
+  res.render('cash', { id : id });
+});
+
 //여기로 넣고?
 //cash를 여기로 넣고 post '/'로 변수를 넘겨준다?
 router.post('/household',function(req,res){
   var request_body;
+  var dataArray = new Array();
   var obj = {};
+  //values는 array
 
   request_body = JSON.stringify(req.body);
   // console.log('body : ' + JSON.stringify(req.body));
   //obj는 Json 객체.
   obj = JSON.parse(request_body);
-  length = obj.grid_values_length;
-
-  for(var i=0; i<length; i++){
+  console.log(obj);
+  console.log('length : ' + obj.length);
+  for(var i=0; i<obj.length; i++){
     values.push([
-      obj['grid_values['+i+'][real_id]'],
+      obj['grid_values['+i+'][cash_id]'],
       obj['grid_values['+i+'][cash_name]'],
       obj['grid_values['+i+'][cash_value]'],
       obj['grid_values['+i+'][cash_kind]']
     ]);
   }
+  console.log(values);
+  // console.log('post household--------------------------');
+  // console.log(values);
 });
+
 
 //파일업로드.
 router.post(['/','/:id'],upload.single('userfile'),function(req,res){

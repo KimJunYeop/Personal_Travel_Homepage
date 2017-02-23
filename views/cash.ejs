@@ -5,161 +5,105 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
-    <title> Travel Blog</title>
+    <title>JunYeop Travel Blog</title>
+
     <!-- 부트스트랩 -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <link href="/stylesheets/cash.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="/SlickGrid-master/slick.grid.css" type="text/css"/>
-    <link rel="stylesheet" href="/SlickGrid-master/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
-    <link rel="stylesheet" href="/SlickGrid-master/examples/examples.css" type="text/css"/>
-
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
-
   <body>
 
-
-    <div style="float : right;">
-      <button class="w3-btn" type="button" name="button" onclick="AddRow()">+</button>
-      <button class="w3-btn" type="button" name="button" onclick="DeleteRow()">-</button>
+    <header>
+      <h1>가계부등록</h1>
+    </header>
+    <div>
+      <button class = "w3-btn w3-right w3-orange w3-border" type="button" name="add" onclick="add_row()">추가</button>
+      <button class = "w3-btn w3-right w3-orange w3-border" type="button" name="delete" onclick="delete_row()">삭제</button>
     </div>
-    <table>
+    <br>
+    <table class="w3-table-all w3-margin-top">
       <tr>
-        <td>
-          <div id="myGrid" style="width:400px;height:500px;"></div>
-        </td>
+        <th>check</th>
+        <th>cash_name</th>
+        <th>cash_value</th>
+        <th>cash_kind</th>
       </tr>
+      <tbody id = "my_tbody">
+      </tbody>
     </table>
-    <button onclick = "Submit()" class="w3-btn" type="button" name="button" style="float : right;">제출</button>
 
-
-
-    <script src="/SlickGrid-master/lib/firebugx.js"></script>
-
-    <script src="/SlickGrid-master/lib/jquery-1.7.min.js"></script>
-    <script src="/SlickGrid-master/lib/jquery-ui-1.8.16.custom.min.js"></script>
-    <script src="/SlickGrid-master/lib/jquery.event.drag-2.2.js"></script>
-
-    <script src="/SlickGrid-master/slick.core.js"></script>
-    <script src="/SlickGrid-master/plugins/slick.checkboxselectcolumn.js"></script>
-    <script src="/SlickGrid-master/plugins/slick.autotooltips.js"></script>
-    <script src="/SlickGrid-master/plugins/slick.cellrangedecorator.js"></script>
-    <script src="/SlickGrid-master/plugins/slick.cellrangeselector.js"></script>
-    <script src="/SlickGrid-master/plugins/slick.cellcopymanager.js"></script>
-    <script src="/SlickGrid-master/plugins/slick.cellselectionmodel.js"></script>
-    <script src="/SlickGrid-master/plugins/slick.rowselectionmodel.js"></script>
-    <script src="/SlickGrid-master/controls/slick.columnpicker.js"></script>
-    <script src="/SlickGrid-master/slick.formatters.js"></script>
-    <script src="/SlickGrid-master/slick.editors.js"></script>
-    <script src="/SlickGrid-master/slick.grid.js"></script>
-    <script src="/SlickGrid-master/slick.dataview.js"></script>
-
+    <button class="w3-btn w3-display-bottomright w3-orange" type="button" onclick="Submit();" name="button">제출</button>
 
 
     <script type="text/javascript">
-      var grid;
-      var dataView;
-      var data = [];
-      var id = <%= id %>;
-      var columns = [
-        {id : "cash_name", name : "이름", field : "cash_name", editor: Slick.Editors.Text},
-        {id : "cash_value", name : "값", field : "cash_value", editor: Slick.Editors.Text},
-        {id : "cash_kind", name : "종류", field : "cash_kind", editor: Slick.Editors.Text}
-      ];
+      function add_row(){
+        var my_tbody = document.getElementById('my_tbody');
+        var row = my_tbody.insertRow(my_tbody.rows.length);
+        if(my_tbody.rows.length > 8){
+          return ;
+        }
 
-      //check box 추가.
-      var checkboxSelector = new Slick.CheckboxSelectColumn({
-      cssClass: "slick-cell-checkboxsel"
-      });
-      columns.unshift(checkboxSelector.getColumnDefinition());
-      var options = {
-        editable: true,
-        enableCellNavigation: true,
-        asyncEditorLoading: false,
-        autoEdit: true
-      };
-      var num_id=0;
-
-      function AddRow(){
-        var d = (data[num_id] = {});
-        d.id = num_id++;
-        d.real_id = id;
-        var grid_data = grid.getData();
-        dataView.addItem(d);
-        grid.render();
+        var cell0 = row.insertCell(0);
+        var cell1 = row.insertCell(1);
+        var cell2 = row.insertCell(2);
+        var cell3 = row.insertCell(3);
+        cell0.innerHTML = '<th><input class="w3-checkbox w3-border" type = "checkbox" style="vertical-align: middle;"></th>';
+        cell1.innerHTML = '<th><input class="w3-input w3-border" type="text" name=""></th>';
+        cell2.innerHTML = '<th><input class="w3-input w3-border" type="text" name=""></th>';
+        cell3.innerHTML = '<th><input class="w3-input w3-border" type="text" name=""></th>';
       }
 
-      $(function(){
-        dataView = new Slick.Data.DataView();
-        console.log(dataView);
-        grid = new Slick.Grid("#myGrid",dataView,columns,options);
+      function delete_row(){
+        var my_tbody = document.getElementById('my_tbody');
+        var rowCnt = my_tbody.rows.length;
+        for(var i=0; i<rowCnt; i++){
+          var row = my_tbody.rows[i];
+          var chkBox = row.cells[0].childNodes[0];
 
-        var columpicker = new Slick.Controls.ColumnPicker(columns,grid,options);
-        grid.setSelectionModel(new Slick.RowSelectionModel({
-          selectActiveRow : false
-        }));
-        grid.registerPlugin(checkboxSelector);
-      });
-
-
-      function DeleteRow(){
-        var selected = grid.getSelectedRows();
-        grid.setSelectedRows([]);
-        $.each(selected, function (index, value) {
-            console.log("Index: " + index)
-            console.log("Value " + value)
-
-            grid.getData().deleteItem(value)
-        })
-        grid.invalidate();
-      }
-      //객체값을 확인하구 싶어요.
-      function JYgetObject(obj){
-        var str = "";
-      	for(key in obj) {
-      		str += key+"="+obj[key]+"\n";
-      	}
-
-      	console.log('JYgetObject : '+ str);
-      	return;
+          if(chkBox!=null && chkBox.checked==true){
+            my_tbody.deleteRow(i);
+            rowCnt--;
+            i--;
+          }
+        }
       }
 
-      //제출 버튼을 눌렀을 때.
-      //그리드 제출 버튼을 눌렀을 때 그리드의 내용이 배열로 넘어간다.
-      //type json grid value from script to server
-      //dataView.getItems에 gird내용이 들어가있는데 이것을 server에
-      //전송해야한다.
       function Submit(){
-        var grid_values = dataView.getItems();
-        console.log(grid_values);
-        var grid_values_length = grid_values.length;
-        var offset = 1;
+        var my_tbody = document.getElementById('my_tbody');
+        var row_length = my_tbody.rows.length;
+
+        var dataArray = new Array();
+        var dataInfo = new Object();
+
+        //값을 읽어온다.
+        for(var i=0; i<row_length; i++){
+          var row = my_tbody.rows[i];
+          var row_value;
+
+          dataInfo.cash_id = <%= id %>;
+          dataInfo.cash_name = row.cells[1].childNodes[0].value;
+          dataInfo.cash_value = row.cells[2].childNodes[0].value;
+          dataInfo.cash_kind = row.cells[3].childNodes[0].value;
+          dataArray.push(dataInfo);
+          // var row_value = row.cells[1].childNodes[0].value;
+        }
+
         $.ajax({
           url : "/write/household",
           type : "POST",
           datatype : 'json',
-          data : {grid_values : grid_values, grid_values_length : grid_values_length, offset : offset}
+          data : {grid_values : dataArray, length : row_length}
         });
         window.close();
-      }
+      };
 
-      //부모창 새로고침.
-      function refreshParent() {
-        window.opener.location.href = window.opener.location.href;
-        if (window.opener.progressWindow) {
-          window.opener.progressWindow.close()
-        }
-        window.close();
-      }
     </script>
-
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
     <script src="/bootstrap/js/bootstrap.min.js"></script>
+
   </body>
-
-
 </html>

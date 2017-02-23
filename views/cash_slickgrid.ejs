@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
+    <title> Travel Blog</title>
+    <!-- 부트스트랩 -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <link href="/stylesheets/cash.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/SlickGrid-master/slick.grid.css" type="text/css"/>
+    <link rel="stylesheet" href="/SlickGrid-master/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+    <link rel="stylesheet" href="/SlickGrid-master/examples/examples.css" type="text/css"/>
+
+
+  </head>
+
+  <body>
+
+
+    <div style="float : right;">
+      <button class="w3-btn" type="button" name="button" onclick="AddRow()">+</button>
+      <button class="w3-btn" type="button" name="button" onclick="DeleteRow()">-</button>
+    </div>
+    <table>
+      <tr>
+        <td>
+          <div id="myGrid" style="width:400px;height:500px;"></div>
+        </td>
+      </tr>
+    </table>
+    <button onclick = "Submit()" class="w3-btn" type="button" name="button" style="float : right;">제출</button>
+
+
+
+    <script src="/SlickGrid-master/lib/firebugx.js"></script>
+
+    <script src="/SlickGrid-master/lib/jquery-1.7.min.js"></script>
+    <script src="/SlickGrid-master/lib/jquery-ui-1.8.16.custom.min.js"></script>
+    <script src="/SlickGrid-master/lib/jquery.event.drag-2.2.js"></script>
+
+    <script src="/SlickGrid-master/slick.core.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.checkboxselectcolumn.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.autotooltips.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellrangedecorator.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellrangeselector.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellcopymanager.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.cellselectionmodel.js"></script>
+    <script src="/SlickGrid-master/plugins/slick.rowselectionmodel.js"></script>
+    <script src="/SlickGrid-master/controls/slick.columnpicker.js"></script>
+    <script src="/SlickGrid-master/slick.formatters.js"></script>
+    <script src="/SlickGrid-master/slick.editors.js"></script>
+    <script src="/SlickGrid-master/slick.grid.js"></script>
+    <script src="/SlickGrid-master/slick.dataview.js"></script>
+
+
+
+    <script type="text/javascript">
+      var grid;
+      var dataView;
+      var data = [];
+      var id = <%= id %>;
+      var columns = [
+        {id : "cash_name", name : "이름", field : "cash_name", editor: Slick.Editors.Text},
+        {id : "cash_value", name : "값", field : "cash_value", editor: Slick.Editors.Text},
+        {id : "cash_kind", name : "종류", field : "cash_kind", editor: Slick.Editors.Text}
+      ];
+
+      //check box 추가.
+      var checkboxSelector = new Slick.CheckboxSelectColumn({
+      cssClass: "slick-cell-checkboxsel"
+      });
+      columns.unshift(checkboxSelector.getColumnDefinition());
+      var options = {
+        editable: true,
+        enableCellNavigation: true,
+        asyncEditorLoading: false,
+        autoEdit: true
+      };
+      var num_id=0;
+
+      function AddRow(){
+        var d = (data[num_id] = {});
+        d.id = num_id++;
+        d.real_id = id;
+        var grid_data = grid.getData();
+        dataView.addItem(d);
+        grid.render();
+      }
+
+      $(function(){
+        dataView = new Slick.Data.DataView();
+        console.log(dataView);
+        grid = new Slick.Grid("#myGrid",dataView,columns,options);
+
+        var columpicker = new Slick.Controls.ColumnPicker(columns,grid,options);
+        grid.setSelectionModel(new Slick.RowSelectionModel({
+          selectActiveRow : false
+        }));
+        grid.registerPlugin(checkboxSelector);
+      });
+
+
+      function DeleteRow(){
+        var selected = grid.getSelectedRows();
+        grid.setSelectedRows([]);
+        $.each(selected, function (index, value) {
+            console.log("Index: " + index)
+            console.log("Value " + value)
+
+            grid.getData().deleteItem(value)
+        })
+        grid.invalidate();
+      }
+      //객체값을 확인하구 싶어요.
+      function JYgetObject(obj){
+        var str = "";
+      	for(key in obj) {
+      		str += key+"="+obj[key]+"\n";
+      	}
+
+      	console.log('JYgetObject : '+ str);
+      	return;
+      }
+
+      //제출 버튼을 눌렀을 때.
+      //그리드 제출 버튼을 눌렀을 때 그리드의 내용이 배열로 넘어간다.
+      //type json grid value from script to server
+      //dataView.getItems에 gird내용이 들어가있는데 이것을 server에
+      //전송해야한다.
+      function Submit(){
+        var grid_values = dataView.getItems();
+        console.log(grid_values);
+        var grid_values_length = grid_values.length;
+        var offset = 1;
+        $.ajax({
+          url : "/write/household",
+          type : "POST",
+          datatype : 'json',
+          data : {grid_values : grid_values, grid_values_length : grid_values_length, offset : offset}
+        });
+        window.close();
+      }
+
+      //부모창 새로고침.
+      function refreshParent() {
+        window.opener.location.href = window.opener.location.href;
+        if (window.opener.progressWindow) {
+          window.opener.progressWindow.close()
+        }
+        window.close();
+      }
+    </script>
+
+    <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+
+
+</html>

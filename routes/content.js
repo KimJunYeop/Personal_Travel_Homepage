@@ -69,14 +69,14 @@ router.post('/modify/:id',function(req,res,next){
   var title = req.body.title;
   var description = req.body.description;
   var id = req.params.id;
-  var sql_update = "UPDATE topic SET title = ?, description = ? WHERE id = " + id;
+  console.log(id);
+  var sql_update = 'UPDATE topic SET title=?, description=? WHERE id=?';
+  connection.query(sql_update,[title,description,id],function(err,result,fields){
+    if(err) throw err;
+    res.redirect('/content/'+id);
+  })
   console.log(title);
 });
-
-
-function trim(str){
-  return str.toString().replace(/"/g,"");
-}
 
 
 module.exports = router;

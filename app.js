@@ -12,7 +12,6 @@ var first = require('./routes/first');
 var main = require('./routes/main');
 var write = require('./routes/write');
 var content = require('./routes/content');
-var cash = require('./routes/cash');
 var cash_write = require('./routes/cash_write');
 var hi = require('./routes/hi');
 
@@ -38,7 +37,7 @@ app.use('/first', first);
 app.use('/main',main);
 app.use('/write',write);
 app.use('/content',content);
-app.use('/cash',cash);
+app.use('/cash',write);
 app.use('/cash_write',cash_write);
 app.use('/hi',hi);
 app.use('/modify',content);
