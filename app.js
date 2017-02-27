@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var db = require('./db.js');
+var variable = require('./variable.js');
 
 //routes
 var first = require('./routes/first');
@@ -38,12 +39,13 @@ app.use('/main',main);
 app.use('/write',write);
 app.use('/content',content);
 app.use('/cash',write);
-app.use('/cash_write',cash_write);
+app.use('/cash_write',cash_write);  
 app.use('/hi',hi);
 app.use('/modify',content);
 
 
 db();
+
 
 //전역변수
 

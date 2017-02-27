@@ -25,19 +25,37 @@
     <br>
     <table class="w3-table-all w3-margin-top">
       <tr>
-        <th>check</th>
-        <th>cash_name</th>
-        <th>cash_value</th>
-        <th>cash_kind</th>
+        <th style="width : 60px;">선택</th>
+        <th style="text-align : center;">물품이름</th>
+        <th style="text-align : center;">가격</th>
+        <th style="width : 150px;">화폐종류</th>
       </tr>
       <tbody id = "my_tbody">
       </tbody>
     </table>
 
+
     <button class="w3-btn w3-display-bottomright w3-orange" type="button" onclick="Submit();" name="button">제출</button>
 
 
     <script type="text/javascript">
+    //escape를 해줘야한다.
+      var values = <%- values %>;
+      console.log(values);
+
+      if(values.length > 0)
+      {
+        //values에 뭐 있으면 table에 값을 입력한다.
+        var my_tbody = document.getElementById('my_tbody');
+        for(var i=0; i<values.length; i++){
+          add_row();
+          var row = my_tbody.rows[i];
+          row.cells[1].childNodes[0].value = values[i][1];
+          row.cells[2].childNodes[0].value = values[i][2];
+          row.cells[3].childNodes[0].value = values[i][3];
+        }
+      }
+
       function add_row(){
         var my_tbody = document.getElementById('my_tbody');
         var row = my_tbody.insertRow(my_tbody.rows.length);
@@ -52,7 +70,12 @@
         cell0.innerHTML = '<th><input class="w3-checkbox w3-border" type = "checkbox" style="vertical-align: middle;"></th>';
         cell1.innerHTML = '<th><input class="w3-input w3-border" type="text" name=""></th>';
         cell2.innerHTML = '<th><input class="w3-input w3-border" type="text" name=""></th>';
-        cell3.innerHTML = '<th><input class="w3-input w3-border" type="text" name=""></th>';
+        cell3.innerHTML = `<th><select class="w3-select w3-border" type="text" name="option">
+          <option value="" disabled selected>화폐종류</option>
+          <option value="한화">한화(KRW)</option>
+          <option value="유로">유로(EUR)</option>
+          <option value="달러">달러(USD)</option>
+        </th>`;
       }
 
       function delete_row(){
@@ -73,31 +96,57 @@
       function Submit(){
         var my_tbody = document.getElementById('my_tbody');
         var row_length = my_tbody.rows.length;
-
         var dataArray = new Array();
-        var dataInfo = new Object();
 
-        //값을 읽어온다.
         for(var i=0; i<row_length; i++){
           var row = my_tbody.rows[i];
-          var row_value;
-
+          var dataInfo = new Object();
           dataInfo.cash_id = <%= id %>;
           dataInfo.cash_name = row.cells[1].childNodes[0].value;
           dataInfo.cash_value = row.cells[2].childNodes[0].value;
           dataInfo.cash_kind = row.cells[3].childNodes[0].value;
           dataArray.push(dataInfo);
-          // var row_value = row.cells[1].childNodes[0].value;
         }
-
-        $.ajax({
-          url : "/write/household",
-          type : "POST",
-          datatype : 'json',
-          data : {grid_values : dataArray, length : row_length}
-        });
-        window.close();
+        if(check(row_length)){
+          $.ajax({
+            url : "/write/household",
+            type : "POST",
+            datatype : 'json',
+            data : {grid_values : dataArray, length : row_length}
+          });
+          window.close();
+        }
       };
+
+      //필수성 체크
+      function check(row_length){
+        var my_tbody = document.getElementById('my_tbody');
+        var check_okay=0;
+        for(var i=0; i<row_length; i++){
+          var row = my_tbody.rows[i];
+          if(row.cells[1].childNodes[0].value==""||row.cells[2].childNodes[0].value==""||row.cells[3].childNodes[0].value==""){
+            if(row.cells[1].childNodes[0].value==""){
+              alert("물품 이름이 비었습니다. 입력바랍니다.");
+              row.cells[1].childNodes[0].focus();
+              return 0;
+            }else if(row.cells[2].childNodes[0].value==""){
+              alert("물품 가격이 비었습니다. 입력바랍니다.");
+              row.cells[2].childNodes[0].focus();
+              return 0;
+            }else if(row.cells[3].childNodes[0].value==""){
+              alert("물품 종류가 비었습니다. 입력바랍니다.");
+              row.cells[3].childNodes[0].focus();
+              return 0;
+            }
+          }else{
+            check_okay++;
+          }
+        }
+        if(check_okay == row_length){
+          return 1;
+        }
+      }
+
 
     </script>
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->

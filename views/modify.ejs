@@ -33,18 +33,8 @@
       	<textarea name="description" class="form-control col-sm-5" rows="10"></textarea>
         <button class="w3-btn w3-orange w3-margin" type="submit" style="float : right; ">Modify</button>
       </form>
-      <!-- <form class="" action="/content/modify/:<%= id %>" method="post">
-        <input type="text" name="title">
-        <input type="text" name="description">
-        <input type="submit">제출</input>
-      </form> -->
     </div>
 
-    <!-- 업로드 -->
-    <!-- <form action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" name="uploadFile">
-      <input type="submit" name="Upload">
-    </form> -->
 
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -52,8 +42,12 @@
 
     <script type="text/javascript">
       var theForm = document.forms[0];
-      theForm.title.value = `<%= topics[0].title %>`;
-      theForm.description.value = `<%= topics[0].description %>`;
+      theForm.title.value = '<%= topics[0].title %>';
+      theForm.description.value = '<%= topics[0].description %>';
+
+      function open_popup(){
+        window.open("/write/cash/<%= id %>","","width=600, height=700");
+      }
 
     </script>
   </body>

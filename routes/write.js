@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var app = express();
-
+var variable = require('../variable');
+var Type = require('type-of-is');
+//Type.of(ralph);                  // [Function: Person]
 var path = require('path');
 
 var moment = require('moment');
@@ -16,26 +18,18 @@ var _storage = multer.diskStorage({
 });
 var upload = multer({ storage: _storage });
 
-var values = new Array();
 var length = 0;
 var last_id;
 
-function setValues(values){
-  values = values;
-}
-
-function getValues(values){
-  return values;
-}
 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   var last_id_sql ="SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'personal_travel' AND TABLE_NAME = 'topic'"
+  var values = variable.getValues();
+  console.log('values : ' + values);
 
   connection.query(last_id_sql,function(err,topics,fields){
-    console.log('topics : ' + topics);
-    console.log(topics[0].AUTO_INCREMENT);
     //topics[0].ATUO_INCREMENT 로 하면됩니다.
     res.render('write',{last_id : topics[0].AUTO_INCREMENT , values : values , length : length});
   });
@@ -44,8 +38,11 @@ router.get('/', function(req, res, next) {
 // 가계부 등록 팝업.
 router.get('/cash/:id',function(req,res,next){
   var id = req.params.id;
-  console.log('id : ' + id);
-  res.render('cash', { id : id });
+  var values = new Array();
+  values = JSON.stringify(variable.getValues());
+  // console.log(values.replace(/&quot;/g,""));
+
+  res.render('cash', { id : id, values : values });
 });
 
 //여기로 넣고?
@@ -59,20 +56,20 @@ router.post('/household',function(req,res){
   request_body = JSON.stringify(req.body);
   // console.log('body : ' + JSON.stringify(req.body));
   //obj는 Json 객체.
+
   obj = JSON.parse(request_body);
   console.log(obj);
-  console.log('length : ' + obj.length);
+
   for(var i=0; i<obj.length; i++){
-    values.push([
+    dataArray.push([
       obj['grid_values['+i+'][cash_id]'],
       obj['grid_values['+i+'][cash_name]'],
       obj['grid_values['+i+'][cash_value]'],
       obj['grid_values['+i+'][cash_kind]']
     ]);
   }
-  console.log(values);
-  // console.log('post household--------------------------');
-  // console.log(values);
+  variable.setValues(dataArray);
+  console.log(dataArray);
 });
 
 
@@ -82,7 +79,7 @@ router.post(['/','/:id'],upload.single('userfile'),function(req,res){
   var title = req.body.title;
   var description = req.body.description;
   var date = moment().subtract(10, 'days').calendar();
-
+  var values = variable.getValues();
 
   if(req.file){
     //아 이건좀 아닌거 같은데.. 나중에 수정. filepath에서 public을 지워야한다.
@@ -93,7 +90,6 @@ router.post(['/','/:id'],upload.single('userfile'),function(req,res){
   }
 
   var sql = "INSERT INTO topic(title,description,date,filepath) VALUES(?,?,?,?)";
-  var sql_values = [];
   var sql_cash = "INSERT INTO household(cash_id,cash_name,cash_value,cash_kind) VALUES ?";
 
   //household topics INSERT
@@ -105,6 +101,7 @@ router.post(['/','/:id'],upload.single('userfile'),function(req,res){
       if(err){
         console.log(err);
       }
+      variable.setClear();
       res.redirect('/main');
     })
   })
