@@ -69,7 +69,8 @@ router.post('/household',function(req,res){
     ]);
   }
   variable.setValues(dataArray);
-  console.log(dataArray);
+  console.log('/write/household getValues**************');
+  console.log(variable.getValues());
 });
 
 

@@ -41,12 +41,13 @@
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
 
     <script type="text/javascript">
+      // 수정 값 가져오기.
       var theForm = document.forms[0];
-      theForm.title.value = '<%= topics[0].title %>';
-      theForm.description.value = '<%= topics[0].description %>';
+      theForm.title.value = `<%= topics[0].title %>`;
+      theForm.description.value = `<%= topics[0].description %>`;
 
       function open_popup(){
-        window.open("/write/cash/<%= id %>","","width=600, height=700");
+        window.open("/content/modify/cash_modify/<%= id %>","","width=600, height=700");
       }
 
     </script>

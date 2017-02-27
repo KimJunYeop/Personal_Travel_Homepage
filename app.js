@@ -39,9 +39,9 @@ app.use('/main',main);
 app.use('/write',write);
 app.use('/content',content);
 app.use('/cash',write);
-app.use('/cash_write',cash_write);  
+app.use('/cash_write',cash_write);
 app.use('/hi',hi);
-app.use('/modify',content);
+app.use('/cash',content);
 
 
 db();

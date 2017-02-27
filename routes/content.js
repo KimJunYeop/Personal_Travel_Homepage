@@ -3,6 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 var path = require('path');
 var app = express();
+var variable = require('../variable');
 var Type = require('type-of-is');
 
 //이미지를 정적 파일에다가 넣어줘서 전해준다.
@@ -60,22 +61,76 @@ router.get('/modify/:id',function(req,res,next){
     if(err) throw err;
     connection.query(sql_household,function(err,households,fields){
       if(err) throw err;
+      //가계부 넣기
+      variable.setValues(households);
+      console.log('-----------------getValues()');
+      console.log(variable.getValues());
+
       res.render('modify',{topics:topics,households:households,id:id});
     })
   });
 });
 
+function getArray(item,index){
+
+  return
+}
+
+// 수정에서 가계부 수정을 누를시.
+router.get('/modify/cash_modify/:id',function(req,res,next){
+  var id = req.params.id;
+  var values = variable.getValues();
+
+  // console.log(values);
+  // console.log('type -------------------------------');
+  // console.log(Type.of(values));
+  // console.log('every !!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  // console.log(values.every(checkValues));
+
+  //if values의 내용이 object라면.
+  //객체 배열로 바꾸기.
+  if(values.every(checkValues)){
+    values = values.map(function(obj){
+      var nArray = new Array();
+      nArray.push(obj.cash_id,obj.cash_name,obj.cash_value,obj.cash_kind);
+      return nArray;
+    });
+  }
+
+  // console.log('map!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  // console.log(household_values);
+  // console.log('-------------------------------');
+
+  res.render('cash',{id : id, values : JSON.stringify(values)});
+});
+//array인지 check
+function checkValues(values){
+  if(Array.isArray(values)){
+    return false;
+  }else{
+    return true;
+  }
+}
+
 router.post('/modify/:id',function(req,res,next){
   var title = req.body.title;
   var description = req.body.description;
   var id = req.params.id;
-  console.log(id);
-  var sql_update = 'UPDATE topic SET title=?, description=? WHERE id=?';
-  connection.query(sql_update,[title,description,id],function(err,result,fields){
+  var values = variable.getValues();
+
+  console.log(variable.getValues());
+
+  var sql_topic_update = 'UPDATE topic SET title=?, description=? WHERE id=?';
+  var sql_household_update = 'UPDATE household SET cash_id=?,cash_name=?,cash_value=?,cash_kind=? WHERE cash_id = :cash_id';
+
+  connection.query(sql_topic_update,[title,description,id],function(err,result,fields){
     if(err) throw err;
-    res.redirect('/content/'+id);
-  })
-  console.log(title);
+      connection.query(sql_household_update,[values,{cash_id:id}],function(err,results,fields){
+        if(err) throw err;
+
+        res.redirect('/content/'+id);
+      });
+  });
 });
 
 
