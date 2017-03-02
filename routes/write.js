@@ -39,9 +39,11 @@ router.get('/', function(req, res, next) {
 router.get('/cash/:id',function(req,res,next){
   var id = req.params.id;
   var values = new Array();
+  console.log('---------------------getvalues()');
+  console.log(variable.getValues());
   values = JSON.stringify(variable.getValues());
+  console.log(values);
   // console.log(values.replace(/&quot;/g,""));
-
   res.render('cash', { id : id, values : values });
 });
 
@@ -69,8 +71,7 @@ router.post('/household',function(req,res){
     ]);
   }
   variable.setValues(dataArray);
-  console.log('/write/household getValues**************');
-  console.log(variable.getValues());
+  console.log(dataArray);
 });
 
 

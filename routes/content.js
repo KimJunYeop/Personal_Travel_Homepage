@@ -3,8 +3,9 @@ var router = express.Router();
 var fs = require('fs');
 var path = require('path');
 var app = express();
-var variable = require('../variable');
 var Type = require('type-of-is');
+var mysql = require('mysql');
+var variable = require('../variable.js');
 
 //이미지를 정적 파일에다가 넣어줘서 전해준다.
 
@@ -52,7 +53,6 @@ router.get('/delete/:id',function(req,res,next){
 */
 router.get('/modify/:id',function(req,res,next){
   var id = req.params.id;
-  console.log(id);
   //일단 글만 수정하게 만들고 가계부로 가자.
   var sql_topic = "SELECT * FROM topic WHERE id =" + id;
   var sql_household = "SELECT * FROM household WHERE cash_id = " + id;
@@ -61,48 +61,30 @@ router.get('/modify/:id',function(req,res,next){
     if(err) throw err;
     connection.query(sql_household,function(err,households,fields){
       if(err) throw err;
-      //가계부 넣기
       variable.setValues(households);
-      console.log('-----------------getValues()');
-      console.log(variable.getValues());
-
+      var values = variable.getValues();
+      if(values.every(checkValues)){
+        values = values.map(function(obj){
+          var nArray = new Array();
+          nArray.push(obj.cash_id,obj.cash_name,obj.cash_value,obj.cash_kind);
+          return nArray;
+        });
+      };
+      variable.setValues(values);
       res.render('modify',{topics:topics,households:households,id:id});
     })
   });
 });
 
-function getArray(item,index){
-
-  return
-}
 
 // 수정에서 가계부 수정을 누를시.
 router.get('/modify/cash_modify/:id',function(req,res,next){
   var id = req.params.id;
   var values = variable.getValues();
 
-  // console.log(values);
-  // console.log('type -------------------------------');
-  // console.log(Type.of(values));
-  // console.log('every !!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  // console.log(values.every(checkValues));
-
-  //if values의 내용이 object라면.
-  //객체 배열로 바꾸기.
-  if(values.every(checkValues)){
-    values = values.map(function(obj){
-      var nArray = new Array();
-      nArray.push(obj.cash_id,obj.cash_name,obj.cash_value,obj.cash_kind);
-      return nArray;
-    });
-  }
-
-  // console.log('map!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  // console.log(household_values);
-  // console.log('-------------------------------');
-
   res.render('cash',{id : id, values : JSON.stringify(values)});
 });
+
 //array인지 check
 function checkValues(values){
   if(Array.isArray(values)){
@@ -117,19 +99,59 @@ router.post('/modify/:id',function(req,res,next){
   var description = req.body.description;
   var id = req.params.id;
   var values = variable.getValues();
+  var big_values = new Array();
 
-  console.log(variable.getValues());
+
+  //sintex error..
+  /*var data = [['서울특별시 안ㅇ구','1'],['하우우우','2']];
+  var sql = '';
+
+  data.forEach(function(item){
+    sql += mysql.format('UPDATE local SET area=? WHERE id=?;',item);
+  });
+  console.log(sql);
+
+  connection.query(sql,function(err,results,fields){
+    if(err) throw err;
+    console.log(results);
+  });*/
 
   var sql_topic_update = 'UPDATE topic SET title=?, description=? WHERE id=?';
-  var sql_household_update = 'UPDATE household SET cash_id=?,cash_name=?,cash_value=?,cash_kind=? WHERE cash_id = :cash_id';
+  var sql_household_update='';
 
+  console.log('post get values () !!!!!!!!!!!!!!!!!!');
+  console.log(values);
+  //배열에 id push.
+  values.forEach(function(value,index,ar){
+    value.push(Number(id));
+    value.shift();
+  });
+
+  //배열합치기.
+  big_values = values.reduce(function(a,b){
+    return a.concat(b);
+  });
+
+  console.log('big_values==========1');
+  console.log(big_values);
+
+  values.forEach(function(item){
+    sql_household_update += mysql.format('UPDATE household SET cash_name=?,cash_value=?,cash_kind=? WEHRE cash_id = ?;',item);
+  });
+  console.log(sql_household_update);
+
+  /*
+    topic update.
+  */
   connection.query(sql_topic_update,[title,description,id],function(err,result,fields){
     if(err) throw err;
-      connection.query(sql_household_update,[values,{cash_id:id}],function(err,results,fields){
-        if(err) throw err;
+    //if exist
+    connection.query(sql_household_update,function(err,results,fields){
+      console.log('sql_topics_update success!');
+      res.redirect('/content/'+id);
+    })
+    //else not exist
 
-        res.redirect('/content/'+id);
-      });
   });
 });
 
