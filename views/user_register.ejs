@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
+
+    <!-- 부트스트랩 -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- w3.css -->
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+
+  </head>
+  <body>
+
+    <form class="" action="/user_register" method="post">
+      <h1 class="w3-margin">회원가입 (Register)</h1>
+      <br>
+      <div class="w3-margin">
+        <div class="form-group">
+          <label for="user_name"><span class="label label-primary">Name :</span></label>
+          <input type="text" class="form-control" name="user_name" id="user_name">
+        </div>
+        <div class="form-group">
+          <label for="pwd"><span class="label label-primary">Password :</span></label>
+          <input type="text" class="form-control" name="pwd" id="pwd">
+        </div>
+        <div class="form-group">
+          <label for="email"><span class="label label-primary">Email :</span></label>
+          <input type="text" class="form-control" name="email" id="email">
+        </div>
+        <div>
+          <p><span class="label label-primary">gender</span></p>
+          <label class="radio-inline">
+            <input type="radio" name="user_sex">남자
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="user_sex">여자
+          </label>
+        </div>
+      </div>
+      <input type="button" class="w3-btn w3-orange w3-right w3-margin" name="" value="등록">
+    </form>
+
+    <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+  </body>
+</html>

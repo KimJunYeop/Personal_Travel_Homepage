@@ -138,21 +138,22 @@ router.post('/modify/:id',function(req,res,next){
   values.forEach(function(item){
     sql_household_update += mysql.format('UPDATE household SET cash_name=?,cash_value=?,cash_kind=? WEHRE cash_id = ?;',item);
   });
+
   console.log(sql_household_update);
 
   /*
     topic update.
   */
-  connection.query(sql_topic_update,[title,description,id],function(err,result,fields){
-    if(err) throw err;
-    //if exist
-    connection.query(sql_household_update,function(err,results,fields){
-      console.log('sql_topics_update success!');
-      res.redirect('/content/'+id);
-    })
-    //else not exist
-
-  });
+  // connection.query(sql_topic_update,[title,description,id],function(err,result,fields){
+  //   if(err) throw err;
+  //   //if exist
+  //   connection.query(sql_household_update,function(err,results,fields){
+  //     console.log('sql_topics_update success!');
+  //     res.redirect('/content/'+id);
+  //   })
+  //   //else not exist
+  // });
+  var test_sql = "INSERT INTO household (cash_name,cash_value,cash_kind) SELECT ?"
 });
 
 

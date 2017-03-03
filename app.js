@@ -15,8 +15,7 @@ var write = require('./routes/write');
 var content = require('./routes/content');
 var cash_write = require('./routes/cash_write');
 var hi = require('./routes/hi');
-
-
+var user_register = require('./routes/user_register');
 var app = express();
 
 // view engine setup
@@ -39,9 +38,10 @@ app.use('/main',main);
 app.use('/write',write);
 app.use('/content',content);
 app.use('/cash',write);
-app.use('/cash_write',cash_write);  
+app.use('/cash_write',cash_write);
 app.use('/hi',hi);
 app.use('/modify',content);
+app.use('/user_register',user_register);
 
 
 db();
